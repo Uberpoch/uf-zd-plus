@@ -16,11 +16,7 @@ app.use(bodyParser.json());
 // app.use(expressValidator());
 
 app.use(session({
-  // zdString: process.env.ZD_STRING,
-  // ufHub: process.env.UF_HUB,
-  // ufKey: process.env.UF_KEY,
-  // ufSec: process.env.UF_SEC,
-  // mongoUrl: process.env.DATABASE,
+
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
