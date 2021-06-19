@@ -145,9 +145,9 @@ exports.makeItem = async (token, item) => {
             published_at: data.published_at
         }
         publishItem(token,pubData);
-
+        // console.log(data);
         const dbItem = {
-            uf_stream: item.stream,
+            uf_stream: item.uf_stream,
             uf_item: data.id,
             id: item.id,
             draft: item.draft,
@@ -163,19 +163,31 @@ exports.makeItem = async (token, item) => {
 
 exports.updateItem = async (token, item) => {
     // PATCH https://v2.api.uberflip.com/items/{itemId}
-    debugger
-    return axios.patch(`https://v2.api.uberflip.com/items/${item.uf_item}`,{
-        // body
-            "hub_id": process.env.UF_HUB,
-            "title": item.title,
-            "content": item.body,
-            "seo_title": item.name,
-            "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
-            "published_at": item.created_at,
-            "hidden": false,
-            "canonical_url": item.html_url,
-            "canonical_redirect": true
-    },{
+    const body = {
+        "hub_id": process.env.UF_HUB,
+        "title": item.title,
+        "content": item.body,
+        "seo_title": item.name,
+        "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
+        "published_at": item.created_at,
+        "hidden": item.outdated,
+        "canonical_url": item.html_url,
+        "canonical_redirect": true
+    }
+    // console.log(body);
+    return axios.patch(`https://v2.api.uberflip.com/items/${item.uf_item}`,
+    {
+        "hub_id": process.env.UF_HUB,
+        "title": item.title,
+        // "content": item.body,
+        "seo_title": item.name,
+        "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
+        "published_at": item.created_at,
+        "hidden": item.outdated,
+        "canonical_url": item.html_url,
+        "canonical_redirect": true   
+    }
+    ,{
         headers: {
             "Authorization": `Bearer ${token}`,
             "User-Agent": "Zendesk-Uberflip Integration Script",
