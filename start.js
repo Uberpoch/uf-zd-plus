@@ -15,7 +15,7 @@ mongoose.connect(process.env.DATABASE, {
 .then(() => {
   console.log(`mongoose connected to mongo`);
 })
-mongoose.set('debug', true)
+mongoose.set('debug', false)
 mongoose.Promise = global.Promise;
 mongoose.connection.on('error', (err) => {
   console.log(`🚫🚫🚫🚫 => ${err.message}`);
