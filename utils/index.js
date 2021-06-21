@@ -3,6 +3,7 @@ const dbs = require('./db-scripts');
 const zds = require('./zd-scripts');
 const ufs = require('./uf-scripts');
 const sort = require('./sort');
+const server = require('../start.js');
 
 const zdCreds = Buffer.from(process.env.ZD_STRING).toString('base64');
 
@@ -36,14 +37,23 @@ const run = async () => {
     const nopeStreams = await dbs.getNopeStreams();
     const runStreamLoop = await sort.streamLoop(token, streamData, savedStreams, nopeStreams);
     // await sort.compareStreams(token, streamData, savedStreams, nopeStreams)
-    setTimeout(async function(){
-      // console.log('timeout complete running items');
+    console.log(runStreamLoop);
+    
+    if(runStreamLoop === true) {
+      console.log('timeout complete running items');
       const streamsForItems = await dbs.getStreams();
       const runItemLoop = await sort.itemLoop(token, itemData, savedItems, streamsForItems, nopeStreams);
       // const finalItems = await sort.compareItems(token, itemData, savedItems, streamsForItems, nopeStreams)
-    }, 1500);
-      
-    const lastStep = await dbs.createNextEpoch(nextEpoch);
+      console.log(runItemLoop);
+      if(runItemLoop === true){
+        const lastStep = await dbs.createNextEpoch(nextEpoch);
+        // server.close();
+        setTimeout(() =>{
+          process.kill(process.pid, 'SIGTERM')
+        },1000)
+      }
+
+    };
   
   } catch (err) {
     console.log(err);

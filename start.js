@@ -34,4 +34,10 @@ app.set('port', process.env.port || 7777);
 const server = app.listen(app.get('port'), () => {
   console.log(`Express running => PORT ${server.address().port}`);
 })
-// app('/');
+
+// exports.close = () => {
+//   console.log('express closing');
+//   server.close(() => {
+//     console.log('express closed?');
+//   });
+// }

@@ -43,10 +43,23 @@ const isNopeStream = async (token, stream, savedStreams, nopeStreams) => {
 }
 
 exports.streamLoop = async (token, streamData, savedStreams, nopeStreams) => {
-  streamData.forEach(stream => {
+  let complete = false;
+  // console.log(complete);
+  const runs = streamData.length - 1;
+  let ran = 1;
+  streamData.forEach((stream, index) => {
     // check if nope stream
     isNopeStream(token, stream, savedStreams, nopeStreams);
+    ran = index;
+    console.log(`${ran} of ${runs}`)
+
+    if(runs === ran) {
+      complete = true;
+    }
   })
+  if(complete === true) {
+    return complete;
+  }
 }
 
 
@@ -94,7 +107,18 @@ const itemInNopeStream = async (token, item, savedItems, streamsForItems, nopeSt
 }
 
 exports.itemLoop = async (token, itemData, savedItems, streamsForItems, nopeStreams) => {
-  itemData.forEach(item => {
-    itemInNopeStream(token, item, savedItems, streamsForItems, nopeStreams)
+  let complete = false;
+
+  const runs = itemData.length - 1;
+  let ran = 0;
+  itemData.forEach((item, index)=> {
+    itemInNopeStream(token, item, savedItems, streamsForItems, nopeStreams);
+    ran = index;
+    if(runs === ran){
+      complete = true;
+    }
   })
+  if(complete === true){
+    return complete;
+  }
 }
