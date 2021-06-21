@@ -1,51 +1,11 @@
-require('dotenv').config({path: '.env'});
-
 const h = require('./helpers');
 const dbs = require('./db-scripts');
 const zds = require('./zd-scripts');
 const ufs = require('./uf-scripts');
 const sort = require('./sort');
 
-const express = require('express');
-const session = require('express-session');
-const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo');
-const bodyParser = require('body-parser');
-const promisify = require('es6-promisify');
-const expressValidator = require('express-validator');
-const helpers = require('./utils/helpers');
-
 const zdCreds = Buffer.from(process.env.ZD_STRING).toString('base64');
 
-require('./models/Items');
-require('./models/Runs');
-require('./models/Streams');
-require('./models/nopeStreams');
-
-const connectDB = async() => {
-
-  mongoose.connect(process.env.DATABASE, {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    bufferCommands: false,
-    keepAlive: 30000,
-    connectTimeoutMS: 30000,
-    socketTimeoutMS: null
-  }
-  )
-  .then(() => {
-    console.log(`mongoose connected to mongo`);
-  })
-  mongoose.set('debug', false)
-  mongoose.Promise = global.Promise;
-  mongoose.connection.on('error', (err) => {
-    console.log(`🚫🚫🚫🚫 => ${err.message}`);
-  })
-  mongoose.connection.on('disconnected', function(){
-    console.log("Mongoose default connection is disconnected");
-  });
-}
 
 
 const run = async () => {
@@ -55,7 +15,7 @@ const run = async () => {
     const token = await ufs.auth();
     const lastEpoch = await dbs.getLastEpoch();
     const zdItems = await zds.getZdReturnedValues(zdCreds,lastEpoch);
-
+    console.log(`articles count: ${zdItems.articles.length}`);
 
     
     // Sort data
@@ -91,14 +51,7 @@ const run = async () => {
   
 }
 
-const zdufInt = async () => {
-  console.log('zdufInt started')
-try {
-  await connectDB();
-  console.log('db connected');
-  setTimeout(run, 500);
-} catch (err) {
-  console.log(err);
-}
-}
-zdufInt();
+
+setTimeout(run, 500);
+// run();
+module.exports = run;
