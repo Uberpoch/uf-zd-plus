@@ -93,7 +93,8 @@ const run = async () => {
 const zdufInt = async () => {
   console.log('zdufInt started')
 try {
-  connectDB();
+  await connectDB();
+  console.log('db connected');
   setTimeout(run, 500);
 } catch (err) {
   console.log(err);
