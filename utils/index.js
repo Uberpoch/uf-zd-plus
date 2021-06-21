@@ -17,6 +17,11 @@ const helpers = require('./utils/helpers');
 
 const zdCreds = Buffer.from(process.env.ZD_STRING).toString('base64');
 
+require('./models/Items');
+require('./models/Runs');
+require('./models/Streams');
+require('./models/nopeStreams');
+
 const connectDB = async() => {
 
   mongoose.connect(process.env.DATABASE, {
@@ -42,10 +47,6 @@ const connectDB = async() => {
   });
 }
 
-require('./models/Items');
-require('./models/Runs');
-require('./models/Streams');
-require('./models/nopeStreams');
 
 const run = async () => {
   console.log('the first one is working?');
