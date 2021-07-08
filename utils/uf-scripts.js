@@ -117,15 +117,19 @@ exports.updateStream = async (token, stream) => {
 
 exports.makeItem = async (token, item) => {
     // post https://v2.api.uberflip.com/items
+    let desc = item.body;
+    desc = desc.substring(0, 200) + "...";
+    desc = desc.replace(/(\r\n|\n|\r)/gm, "").replace(/(<([^>]+)>)/gi, "");
     return axios.post('https://v2.api.uberflip.com/items',
     {
         // body
             "hub_id": process.env.UF_HUB,
             "stream": {"id": item.uf_stream},
             "title": item.title,
+            "decsription": desc,
             "content": item.body,
             "seo_title": item.name,
-            "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
+            "thumbnail_url": "https://content.cdntwrk.com/files/aHViPTEyMjk0NSZjbWQ9aXRlbWVkaXRvcmltYWdlJmZpbGVuYW1lPWl0ZW1lZGl0b3JpbWFnZV82MGU1ZmYyNjJiN2FmLnBuZyZ2ZXJzaW9uPTAwMDAmc2lnPWNiMzBlMTRmOWEzMGFhZmI0N2E1NjI0NTFmZjI2YTc4",
             "published_at": item.created_at,
             "hidden": false,
             "canonical_url": item.html_url,
@@ -163,12 +167,16 @@ exports.makeItem = async (token, item) => {
 
 exports.updateItem = async (token, item) => {
     // PATCH https://v2.api.uberflip.com/items/{itemId}
+    let desc = item.body;
+    desc = desc.substring(0, 200) + "...";
+    desc = desc.replace(/(\r\n|\n|\r)/gm, "").replace(/(<([^>]+)>)/gi, "");
     const body = {
         "hub_id": process.env.UF_HUB,
         "title": item.title,
+        "description": desc,
         "content": item.body,
         "seo_title": item.name,
-        "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
+        "thumbnail_url": "https://content.cdntwrk.com/files/aHViPTEyMjk0NSZjbWQ9aXRlbWVkaXRvcmltYWdlJmZpbGVuYW1lPWl0ZW1lZGl0b3JpbWFnZV82MGU1ZmYyNjJiN2FmLnBuZyZ2ZXJzaW9uPTAwMDAmc2lnPWNiMzBlMTRmOWEzMGFhZmI0N2E1NjI0NTFmZjI2YTc4",
         "published_at": item.created_at,
         "hidden": item.outdated,
         "canonical_url": item.html_url,
