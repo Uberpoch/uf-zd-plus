@@ -188,6 +188,7 @@ exports.updateItem = async (token, item) => {
         "hub_id": process.env.UF_HUB,
         "title": item.title,
         // "content": item.body,
+        "description": desc,
         "seo_title": item.name,
         "thumbnail_url": "https://theme.zdassets.com/theme_assets/2238007/a1a20ad59a39a54539cb3471e319ebb37c9eefe9.png",
         "published_at": item.created_at,
