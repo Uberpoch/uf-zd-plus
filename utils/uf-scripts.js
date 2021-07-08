@@ -224,6 +224,7 @@ exports.updateItem = async (token, item) => {
     .catch(err => {
         console.log(err.response);
         console.log(`error in updating an item`);
+        console.log(item);
     })
 };
 
