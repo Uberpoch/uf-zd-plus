@@ -115,6 +115,27 @@ exports.updateStream = async (token, stream) => {
     })
 };
 
+const publishItem = async (token, item) => {
+    axios.post(`https://v2.api.uberflip.com/items/${item.itemId}/publish`,{
+        // body
+            "published_at": item.published_at,
+    },{
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "User-Agent": "Zendesk-Uberflip Integration Script",
+            "Content-Type": "application/json",
+        }
+    })
+    .then(res => {
+        const data = res.data;
+        // console.log('item published');
+    })
+    .catch(err => {
+        console.log(err.response);
+        console.log(`error in publishing an item`);
+    })
+}
+
 exports.makeItem = async (token, item) => {
     // post https://v2.api.uberflip.com/items
     let desc = item.body;
@@ -229,24 +250,3 @@ exports.updateItem = async (token, item) => {
         
     })
 };
-
-const publishItem = async (token, item) => {
-    axios.post(`https://v2.api.uberflip.com/items/${item.itemId}/publish`,{
-        // body
-            "published_at": item.published_at,
-    },{
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "User-Agent": "Zendesk-Uberflip Integration Script",
-            "Content-Type": "application/json",
-        }
-    })
-    .then(res => {
-        const data = res.data;
-        // console.log('item published');
-    })
-    .catch(err => {
-        console.log(err.response);
-        console.log(`error in publishing an item`);
-    })
-}
