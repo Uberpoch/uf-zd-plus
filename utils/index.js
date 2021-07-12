@@ -52,7 +52,7 @@ const run = async () => {
           // server.close();
           setTimeout(() => {
             process.kill(process.pid, 'SIGTERM')
-          },1000)
+          }, 5000)
         }
       }, 4000);
 
