@@ -41,17 +41,20 @@ const run = async () => {
     
     if(runStreamLoop === true) {
       console.log('timeout complete running items');
-      const streamsForItems = await dbs.getStreams();
-      const runItemLoop = await sort.itemLoop(token, itemData, savedItems, streamsForItems, nopeStreams);
-      // const finalItems = await sort.compareItems(token, itemData, savedItems, streamsForItems, nopeStreams)
-      console.log(runItemLoop);
-      if(runItemLoop === true){
-        const lastStep = await dbs.createNextEpoch(nextEpoch);
-        // server.close();
-        setTimeout(() =>{
-          process.kill(process.pid, 'SIGTERM')
-        },1000)
-      }
+      setTimeout(async () => {
+        const streamsForItems = await dbs.getStreams();
+        const runItemLoop = await sort.itemLoop(token, itemData, savedItems, streamsForItems, nopeStreams);
+
+        // const finalItems = await sort.compareItems(token, itemData, savedItems, streamsForItems, nopeStreams)
+        console.log(runItemLoop);
+        if(runItemLoop === true){
+          const lastStep = await dbs.createNextEpoch(nextEpoch);
+          // server.close();
+          setTimeout(() => {
+            process.kill(process.pid, 'SIGTERM')
+          },1000)
+        }
+      }, 4000);
 
     };
   

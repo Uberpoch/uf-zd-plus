@@ -157,6 +157,7 @@ exports.makeItem = async (token, item) => {
             draft: item.draft,
             section_id: item.section_id
         };
+        console.log(dbItem);
         return dbItem;
     })
     .catch(err => {
@@ -219,12 +220,13 @@ exports.updateItem = async (token, item) => {
             draft: item.draft,
             section_id: item.section_id
         };
+        console.log(dbItem);
         return dbItem;
     })
     .catch(err => {
         console.log(err.response);
         console.log(`error in updating an item`);
-        console.log(item);
+        
     })
 };
 
