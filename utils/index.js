@@ -26,7 +26,9 @@ const run = async () => {
     // Sort data
     const nextEpoch = await {epochDateStamp: zdItems.end_time};
     console.log(nextEpoch);
-    if(lastEpoch === zdItems.end_time) return;
+    if(lastEpoch === zdItems.end_time){
+      process.kill(process.pid, 'SIGTERM')
+    }
 
     const streamData = await zdItems.sections;
     const itemData = await zdItems.articles;
