@@ -8,59 +8,29 @@ const ufs = require('./uf-scripts');
 // const throttle = throttledQueue(15, 1000);
 
 
-const isSavedStream = async (token, stream, savedStreams) => {
 
-  if(savedStreams.some(savedStream => savedStream.id === stream.id) === false){
 
-    // create new stream in UF
-    const createUFStream = await ufs.makeStream(token, stream);
 
-    // create new stream in DB
-    const createDBStream = dbs.saveStream(createUFStream);
-  }
-  else {
-    const index = savedStreams.findIndex(savedStream => savedStream.id === stream.id);
-    stream.uf_stream = savedStreams[index].uf_stream;
-    // console.log(stream);
-    // update values in UF
-    const updateUFStream = await ufs.updateStream(token, stream);
-    // update values in DB
-    const updateDBStream = dbs.updateStream(updateUFStream);
-    
-  }
-}
 
-const isNopeStream = async (token, stream, savedStreams, nopeStreams) => {
-  // console.log(stream.category_id === 360001068432);
-  if(stream.category_id === 360001068432){
-    // move to next step
-    dbs.saveNopeStreams(stream);
-    
-  }
-  else {
-    isSavedStream(token, stream, savedStreams);
-  }
-}
+// exports.streamLoop = async (token, streamData, savedStreams, nopeStreams) => {
+//   let complete = false;
+//   // console.log(complete);
+//   const runs = streamData.length - 1;
+//   let ran = 1;
+//   streamData.forEach((stream, index) => {
+//     // check if nope stream
+//     isNopeStream(token, stream, savedStreams, nopeStreams);
+//     ran = index;
+//     console.log(`${ran} of ${runs}`)
 
-exports.streamLoop = async (token, streamData, savedStreams, nopeStreams) => {
-  let complete = false;
-  // console.log(complete);
-  const runs = streamData.length - 1;
-  let ran = 1;
-  streamData.forEach((stream, index) => {
-    // check if nope stream
-    isNopeStream(token, stream, savedStreams, nopeStreams);
-    ran = index;
-    console.log(`${ran} of ${runs}`)
-
-    if(runs === ran) {
-      complete = true;
-    }
-  })
-  if(complete === true) {
-    return complete;
-  }
-}
+//     if(runs === ran) {
+//       complete = true;
+//     }
+//   })
+//   if(complete === true) {
+//     return complete;
+//   }
+// }
 
 
 const isSavedItem = async (token, item, savedItems, streamsForItems) => {

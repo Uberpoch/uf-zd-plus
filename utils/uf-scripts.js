@@ -13,7 +13,7 @@ exports.auth = async () => {
         // console.log(`response in function = ${token}`);
     })
     .catch(err => {
-        console.log(err.response);
+        console.log(err.message);
         console.log('error in getting token')
     })
 };
@@ -42,7 +42,7 @@ exports.makeStream = async (token, stream) => {
         "authentication": true
     }
     
-    return axios.post('https://v2.api.uberflip.com/streams',body,{
+    return await axios.post('https://v2.api.uberflip.com/streams',body,{
         headers: {
             "Authorization": `Bearer ${token}`,
             "User-Agent": "Zendesk-Uberflip Integration Script",
@@ -51,19 +51,11 @@ exports.makeStream = async (token, stream) => {
     })
     .then(res => {
         const data = res.data;
-        // console.log(data);
-        // take original body and new UF stream data, make a mongo doc
-        const dbStream = {
-            uf_stream: data.id,
-            id: stream.id,
-            category_id: stream.category_id,
-            outdated: stream.outdated
-        }
-        // console.log(dbStream);
-        return dbStream;
+
+        return data;
     })
     .catch(err => {
-        console.log(err.response);
+        console.log(err.message);
         console.log(`error in making a stream`);
     })
 };
@@ -115,8 +107,8 @@ exports.updateStream = async (token, stream) => {
     })
 };
 
-const publishItem = async (token, item) => {
-    axios.post(`https://v2.api.uberflip.com/items/${item.itemId}/publish`,{
+exports.publishItem = async (token, item) => {
+    return await axios.post(`https://v2.api.uberflip.com/items/${item.itemId}/publish`,{
         // body
             "published_at": item.published_at,
     },{
@@ -141,7 +133,7 @@ exports.makeItem = async (token, item) => {
     let desc = item.body;
     desc = desc.substring(0, 200) + "...";
     desc = desc.replace(/(\r\n|\n|\r)/gm, "").replace(/(<([^>]+)>)/gi, "");
-    return axios.post('https://v2.api.uberflip.com/items',
+    return await axios.post('https://v2.api.uberflip.com/items',
     {
         // body
             "hub_id": process.env.UF_HUB,
@@ -163,27 +155,12 @@ exports.makeItem = async (token, item) => {
         }
     })
     .then(res => {
-        const data = res.data;
-        
-        const pubData = {
-            itemId: data.id,
-            published_at: data.published_at
-        }
-        publishItem(token,pubData);
-        // console.log(data);
-        const dbItem = {
-            uf_stream: item.uf_stream,
-            uf_item: data.id,
-            id: item.id,
-            draft: item.draft,
-            section_id: item.section_id
-        };
-        console.log(dbItem);
-        return dbItem;
+        const data = res;
+        return data;
     })
     .catch(err => {
-        console.log(err);
-        console.log(`error in making an item`);
+        console.log('Error:', err.message);
+        return err;
     })
 };
 
@@ -205,7 +182,7 @@ exports.updateItem = async (token, item) => {
         "canonical_redirect": true
     }
     // console.log(body);
-    return axios.patch(`https://v2.api.uberflip.com/items/${item.uf_item}`,
+    return await axios.patch(`https://v2.api.uberflip.com/items/${item.uf_item}`,
     {
         "hub_id": process.env.UF_HUB,
         "title": item.title,
@@ -228,24 +205,11 @@ exports.updateItem = async (token, item) => {
     .then(res => {
         const data = res.data;
         
-        const pubData = {
-            itemId: data.id,
-            published_at: data.published_at
-        };
-        publishItem(token,pubData);
-        
-        const dbItem = {
-            uf_stream: item.uf_stream,
-            uf_item: data.id,
-            id: item.id,
-            draft: item.draft,
-            section_id: item.section_id
-        };
-        console.log(dbItem);
-        return dbItem;
+        return data;
     })
     .catch(err => {
         console.log(err.response);
+        console.log('Error:', err.message);
         console.log(`error in updating an item`);
         
     })

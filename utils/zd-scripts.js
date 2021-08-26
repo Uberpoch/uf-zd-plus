@@ -14,6 +14,3 @@ exports.getZdReturnedValues = async (creds,lastEpoch) => {
     })
 }
 
-// https://uberfliphelp.zendesk.com/knowledge/user_segments/edit/360000414471?brand_id=360000231531
-
-//https://uberfliphelp.zendesk.com/knowledge/user_segments/edit/360000407891?brand_id=360000231531
