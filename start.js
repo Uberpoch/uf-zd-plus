@@ -6,7 +6,7 @@ mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true, 
   useUnifiedTopology: true,
   useFindAndModify: false,
-  bufferCommands: false,
+  bufferCommands: true,
   keepAlive: 30000,
   connectTimeoutMS: 30000,
   socketTimeoutMS: null
@@ -35,9 +35,3 @@ const server = app.listen(app.get('port'), () => {
   console.log(`Express running => PORT ${server.address().port}`);
 })
 
-// exports.close = () => {
-//   console.log('express closing');
-//   server.close(() => {
-//     console.log('express closed?');
-//   });
-// }

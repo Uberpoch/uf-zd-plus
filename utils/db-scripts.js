@@ -37,11 +37,11 @@ exports.updateStream = async (item) => {
     category_id: item.category_id,
     outdated: item.outdated
   };
-  const stream =  await Streams.findOneAndUpdate(
+  return await Streams.findOneAndUpdate(
     {id: item.id}, 
     {$set: update}, 
     {"new": true}
-  )
+  );
 }
 
 exports.saveItem = async (item) => {
