@@ -195,6 +195,7 @@ exports.itemNewOrUpdate = async (items, savedItems) => {
   }
   
   console.log('itemNewOrUpdate complete');
+  console.log(`items to create ${itemsToCreate.length} items to update ${itemsToUpdate.length}`);
   return { itemsToCreate, itemsToUpdate };
 };
 
